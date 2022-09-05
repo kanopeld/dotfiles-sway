@@ -1,0 +1,276 @@
+// =============================================================================
+//
+// Waybar configuration
+//
+// Configuration reference: https://github.com/Alexays/Waybar/wiki/Configuration
+//
+// =============================================================================
+
+[
+{
+    "layer": "bottom",
+    "position": "top",
+    "height": 16,
+
+    "modules-left": [
+        "temperature",
+        "cpu",
+        "memory",
+        //"custom/network-speed",
+        "disk"
+    ],
+    "modules-center": [
+        "custom/clock",
+        "custom/weather",
+        "tray"
+    ],
+    "modules-right": [],
+
+    "custom/network-speed": {
+        "format": " {}",
+        "interval": 1,
+        "exec": "psuinfo -c k 2>/dev/null"
+    },
+
+    "temperature": {
+        "thermal-zone": 2,
+        "interval": 10,
+        "critical-threshold": 80,
+        "format": "{temperatureC}°C "
+    },
+
+    "cpu": {
+        "interval": 1,
+        "format": "cpu: {usage}%",
+        "states": {
+            "warning": 70,
+            "critical": 90
+        }
+    },
+
+    "memory": {
+        "interval": 1,
+        "format": "mem:{}%",
+        "states": {
+            "warning": 70,
+            "critical": 90
+        }
+    },
+
+    "disk": {
+       "interval": 30,
+        "format": "disk: {percentage_free}% remaining on {path}",
+        "path": "/"
+    },
+
+    "custom/weather": {
+        "interval": 3600,
+        "exec": "curl 'https://wttr.in/Tbilisi?m&format=3'"
+    },
+
+    "custom/clock": {
+        "format": "{}",
+        "interval": 1,
+        "exec": "date"
+    }
+},
+{
+    // -------------------------------------------------------------------------
+    // Global configuration
+    // -------------------------------------------------------------------------
+
+    "layer": "bottom",
+
+    // If height property would be not present, it'd be calculated dynamically
+    "height": 16,
+    "position": "bottom",
+
+    "modules-left": ["sway/workspaces"],
+    "modules-center": ["sway/mode"],
+    "modules-right": [
+        "network#vpn",
+        "network#wifi",
+        "bluetooth",
+        "sway/language",
+        "keyboard-state",
+
+        // media
+        "idle_inhibitor",
+        "pulseaudio",
+        //"custom/spotify",
+
+        "custom/dnf",
+        // system
+        "backlight",
+        "battery"
+    ],
+
+    // -------------------------------------------------------------------------
+    // Modules
+    // -------------------------------------------------------------------------
+
+    "battery": {
+        "format": "{capacity}% {icon}",
+        "format-icons": ["", "", "", "", ""]
+    },
+
+    "sway/mode": {
+        "format": "<span style=\"italic\">{}</span>",
+        "tooltip": false
+    },
+
+    "wlr/taskbar": {
+       "format": "{icon}",
+        "icon-size": 16,
+        "icon-theme": "Papirus",
+        "tooltip-format": "{title}",
+        "on-click": "activate",
+        "on-click-middle": "close",
+        "ignore-list": [
+           "Alacritty",
+           "Spotiry"
+        ],
+        "app_ids-mapping": {
+          "firefoxnightly": "firefox-nightly"
+        }
+    },
+
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "idle",
+            "deactivated": "idle"
+        }
+    },
+
+    "pulseaudio": {
+        "scroll-step": 5,
+        "format": "vol:{volume}%",
+        "format-muted": "MUTED",
+        "format-source": "",
+        "format-source-muted": " MUTED",
+        "format-icons": {
+            "headphone": "HEADPHONE",
+            "headset": "HEADSET",
+            "default": ["奄", "奔", "墳"]
+        },
+        "tooltip-format": "{icon} {volume}% {format_source}",
+        "on-click": "swaymsg exec pavucontrol"
+    },
+
+    "custom/spotify": {
+       "format": "{icon} {}",
+        "escape": true,
+        "return-type": "json",
+        "max-length": 40,
+        "interval": 30, // Remove this if your script is endless and write in loop
+        "on-click": "playerctl -p spotify play-pause",
+        "on-click-right": "killall spotify",
+        "smooth-scrolling-threshold": 10, // This value was tested using a trackpad, it should be lowered if using a mouse.
+        "on-scroll-up" : "playerctl -p spotify next",
+        "on-scroll-down" : "playerctl -p spotify previous",
+        "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null", // Script in resources/custom_modules folder
+        "exec-if": "pgrep spotify"
+    },
+
+    "temperature": {
+        "thermal-zone": 0 ,
+        "critical-threshold": 90,
+        "interval": 22,
+        "format": "{icon} {temperatureC}°C",
+        "format-icons": ["", "", ""],
+        "tooltip": false,
+        "on-click": "swaymsg exec \"\\$term_float watch sensors\""
+    },
+
+    "tray": {
+        "icon-size": 18,
+        "spacing": 5
+    },
+
+    "bluetooth": {
+        "format": "{icon}",
+        "interval": 30,
+        "format-icons": {
+            "enabled": "on",
+            "disabled": "off"
+        },
+        "on-click": "blueberry",
+        "tooltip-format": "{}"
+    },
+
+    "sway/language": {
+        "format": " {}",
+        "min-length": 5,
+        "tooltip": false,
+        "on-click": "swaymsg input $(swaymsg -t get_inputs --raw | jq '[.[] | select(.type == \"keyboard\")][0] | .identifier') xkb_switch_layout next"
+    },
+
+    "keyboard-state": {
+        "numlock": true,
+        "capslock": true,
+        "format": {
+            "numlock": "N {icon}",
+            "capslock": "C {icon}"
+        },
+        "format-icons": {
+            "locked": " locked",
+            "unlocked": " unlocked"
+        }
+    },
+
+    "custom/scratchpad": {
+        "interval": "once",
+        "return-type": "json",
+        "format": "{icon}",
+        "format-icons": {
+            "one": "类",
+            "many": "缾"
+        },
+        "exec": "/bin/sh /usr/share/sway/scripts/scratchpad.sh",
+        "on-click": "swaymsg 'scratchpad show'",
+        "signal": 7
+    },
+
+    "custom/dnf": {
+        "format": "{} UPDATES",
+        "interval": 3600,
+        "exec-if": "[ $(dnf check-update -q | wc -l) -gt 0 ]",
+        "exec": "dnf check-update -q | wc -l"
+    },
+    "backlight": {
+        "device": "intel_backlight",
+        "format": "lights:{percent}%",
+        "format-icons": ["", ""]
+    },
+    "network#vpn": {
+        "interface": "tun0",
+        "format": " {ifname}: {ipaddr}/{cidr}",
+        "format-disconnected": "",
+        "tooltip-format": "{ifname}: {ipaddr}/{cidr}",
+        "on-click": "nm-connection-editor"
+    },
+    "network#wifi": {
+        "interface": "wlp*",
+        "format-ethernet": "",
+        "format-wifi": " {essid} ({signalStrength}%): {ipaddr}/{cidr}",
+        "format-linked": "",
+        "format-disconnected": "",
+        "tooltip-format": "{ifname}: {ipaddr}/{cidr}",
+        "on-click": "nm-connection-editor"
+    },
+    "bluetooth": {
+	      "format": "bluetooth: {status}",
+        "format-off": "",
+        "format-on": "bluetooth",
+	      "format-connected": "bluetooth: {device_alias}",
+	      "format-connected-battery": "bluetooth: {device_alias} {device_battery_percentage}%",
+	// "format-device-preference": [ "device1", "device2" ], // preference list deciding the displayed device
+	      "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
+	      "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
+	      "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+	      "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%",
+        "on-click": "blueberry"
+    }
+}]
+

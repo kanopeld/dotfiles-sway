@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+import os
+import re
+import time
+import sys
+
+
+waitTime = 60 * 60 # 60 seconds * 60 = 1 hour
+src = ""
+
+if len(sys.argv) > 1:
+    try:
+        waitTime = int(sys.argv[1])
+    except Exception as e:
+        print("error: parsing wait time failed '{}': {}".format(e, sys.argv[1]))
+
+if len(sys.argv) > 2:
+    src = sys.argv[2]
+
+if src == "":
+    src = os.path.dirname(__file__)
+
+
+while True:
+    print("walking dir '{}'".format(src))
+    for (dirpath, dirnames, filenames) in os.walk(src):
+        print("dir: '{}'".format(dirpath))
+        for file in filenames:
+            if not re.match("[\S\s\\\/]+.(png|jpg|jpeg)$", file):
+                continue
+            print("trying to apply image '{}'".format(file))
+            cmd = "swaymsg output '*' bg {} fill".format(os.path.join(src, file))
+            print("cmd: '{}'".format(cmd))
+            os.system(cmd)
+            time.sleep(waitTime)
+        

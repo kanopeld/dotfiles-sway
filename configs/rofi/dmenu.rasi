@@ -1,0 +1,49 @@
+@theme "colors"
+
+* {
+    background-color:      @colorBackground;
+    border-color:          @colorPrimary;
+    text-color:            @colorOnBackground;
+    font:            "Roboto Mono 10";
+}
+window {
+    anchor:     north;
+    location:   north;
+    width:      100%;
+    padding:    1px;
+    children:   [ horibox ];
+}
+horibox {
+    orientation: horizontal;
+    children:   [ prompt, entry, listview ];
+}
+listview {
+    layout:     horizontal;
+    spacing:    1px;
+    lines:      100;
+}
+entry {
+    expand:     false;
+    width:      10em;
+    color: @colorPrimary;
+}
+prompt {
+    color: @colorPrimary;
+}
+element {
+    padding: 0px 2px;
+}
+element selected {
+    background-color: @colorPrimary;
+    text-color: @colorOnPrimary;
+}
+element-text, element-icon {
+  background-color: inherit;
+  text-color: inherit;
+}
+textbox-prompt-colon {
+    expand:     false;
+    str:        ":";
+    margin:     0px 0.3em 0em 0em ;
+    text-color: @colorPrimary;
+}

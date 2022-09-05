@@ -1,0 +1,285 @@
+/* =============================================================================
+ *
+ * Waybar configuration
+ *
+ * Configuration reference: https://github.com/Alexays/Waybar/wiki/Configuration
+ *
+ * =========================================================================== */
+@import "./colors.css";
+
+@keyframes blink-warning {
+    70% {
+        color: @colorOnError;
+    }
+
+    to {
+        color: @colorOnError;
+        background-color: @colorError;
+    }
+}
+
+@keyframes blink-critical {
+    70% {
+      color: @colorOnErrorContainer;
+    }
+
+    to {
+        color: @colorOnErrorContainer;
+        background-color: @colorErrorContainer;
+    }
+}
+
+
+/* -----------------------------------------------------------------------------
+ * Base styles
+ * -------------------------------------------------------------------------- */
+
+/* Reset all styles */
+* {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    font-family: "Roboto Mono", monospace;
+}
+
+/* The whole bar */
+#waybar {
+    background: @colorBackground;
+    color: @colorOnBackground;
+    font-size: 14px;
+}
+
+/* Each module */
+#custom-pacman,
+#custom-menu,
+#custom-help,
+#custom-scratchpad,
+#custom-github,
+#custom-clipboard,
+#bluetooth,
+#battery,
+#clock,
+#cpu,
+#custom-cpu,
+#memory,
+#mode,
+#network,
+#pulseaudio,
+#temperature,
+#idle_inhibitor,
+#backlight,
+#language,
+#custom-sunset,
+#custom-playerctl,
+#custom-weather,
+#custom-clock,
+#tray {
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+
+/* -----------------------------------------------------------------------------
+ * Module styles
+ * -------------------------------------------------------------------------- */
+
+#tray {
+    background-color: @colorPrimary;
+    color: @colorOnPrimary;
+}
+
+#custom-weather {
+    background-color: @colorPrimary;
+    color: @colorOnPrimary;
+}
+
+#custom-scratchpad {
+    background-color: @colorPrimay;
+}
+
+#battery {
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+#battery.warning {
+    color: @colorError;
+}
+
+#battery.critical {
+    background-color: @colorError;
+    color: @colorOnError;;
+    animation-name: blink-critical;
+    animation-duration: 1s;
+}
+
+#battery.warning.discharging {
+    animation-name: blink-warning;
+    animation-duration: 3s;
+}
+
+#battery.critical.discharging {
+    animation-name: blink-critical;
+    animation-duration: 1s;
+}
+
+#clock {
+    padding: 0 4px 0 4px;
+    margin: 0;
+    /*font-weight: bold;*/
+    background-color: @colorPrimary;
+    color: @colorOnPrimary;
+}
+
+#custom-cpu {
+    background-color: @colorPrimaryContainer;
+    color: @colorOnPrimaryContainer;
+}
+
+#cpu {
+    background-color: @colorPrimaryContainer;
+    color: @colorOnPrimaryContainer;
+}
+
+#cpu.warning {
+    color: @colorError;
+}
+
+#cpu.critical {
+    background-color: @colorError;
+    color: @colorOnError;
+    animation-name: blink-critical;
+    animation-duration: 1s;
+}
+
+#memory {
+    background-color: @colorPrimaryContainer;
+    color: @colorOnPrimaryContainer;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+#memory.warning {
+    color: @colorError;
+}
+
+#memory.critical {
+    background-color: @colorError;
+    color: @colorOnError;
+    animation-name: blink-critical;
+    animation-duration: 1s;
+}
+
+#disk {
+    padding: 0 6px 0 6px;
+    background-color: @colorSecondaryContainer;
+    color: @colorSecondary;
+}
+
+#mode {
+    color: @colorOnBackground
+}
+
+#network {
+    color: @colorPrimary;
+    margin-left: 8px;
+}
+
+#network.disconnected {
+    color: @colorError;
+}
+
+#pulseaudio.muted {
+    background-color: @colorError;
+    color: @colorOnError;
+}
+
+#temperature {
+    color: @colorPrimary;
+}
+
+#temperature.critical {
+    background-color: @colorError;
+    color: @colorOnError;
+    animation-name: blink-critical;
+    animation-duration: 1s;
+}
+
+#window {
+    font-weight: bold;
+    margin-right: 25px;
+    color: @colorPrimary;
+}
+
+#workspaces {
+    color: @colorOnPrimary;
+}
+
+#workspaces button {
+    padding-left: 4px;
+    padding-right: 4px;
+    background-color: @colorPrimary;
+    color: @colorOnPrimary;
+}
+
+#workspaces button:hover {
+    background: @colorSecondaryContainer;
+    color: @colorOnSecondaryContainer;
+    border: none;
+    font-weight: normal;
+}
+
+#workspaces button.focused {
+    background-color: @colorPrimaryContainer;
+    color: @colorOnPrimaryContainer;
+}
+
+#workspaces button.urgent {
+    background-color: @colorErrorContainer;
+    color: @colorOnErrorContainer;
+}
+
+#bluetooth.disabled {
+    color: @colorError;
+}
+
+#bluetooth.connected {
+    background-color: @colorPrimary;
+    color: @colorOnPrimary;
+}
+
+#idle_inhibitor.activated {
+    background-color: @colorSecondaryContainer;
+    color: @colorOnSecondaryContainer;
+}
+
+#custom-pacman {
+    color: @colorError;
+}
+
+#custom-dnf {
+    color: @colorOnError;
+    padding: 0 4px 0 4px;
+    border-left: solid 4px @colorBackground;
+    border-right: solid 4px @colorBackground;
+    background-color: @colorError;
+}
+
+#custom-wf-recorder {
+    color: @colorError;
+    padding-right: 10px;
+}
+
+#window {
+    padding: 0 4px 0 8px;
+}
+
+#custom-clock {
+    background-color: @colorSecondary;
+    color: @colorOnSecondary;
+}
