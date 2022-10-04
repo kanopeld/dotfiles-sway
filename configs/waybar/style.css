@@ -131,8 +131,8 @@
     padding: 0 4px 0 4px;
     margin: 0;
     /*font-weight: bold;*/
-    background-color: @colorPrimary;
-    color: @colorOnPrimary;
+    background-color: @colorBackground;
+    color: @colorOnBackground;
 }
 
 #custom-cpu {

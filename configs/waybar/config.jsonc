@@ -8,36 +8,36 @@
 
 [
 {
+    // -------------------------------------------------------------------------
+    // Global configuration
+    // -------------------------------------------------------------------------
+
     "layer": "bottom",
-    "position": "top",
+    "position": "bottom",
     "height": 16,
-    "output": "eDP-1",
+    // "output": "eDP-1",
 
-    "modules-left": [
-        "temperature",
-        "cpu",
-        "memory",
-        //"custom/network-speed",
-        "disk"
+    "modules-left": ["sway/workspaces", "clock", "cpu", "memory", "temperature"],
+    "modules-center": ["sway/mode"],
+    "modules-right": [
+        "network#vpn",
+        "network#wifi",
+        "bluetooth",
+        "sway/language",
+        "idle_inhibitor",
+        "pulseaudio",
+        "custom/dnf",
+        "backlight",
+        "battery"
     ],
-    "modules-center": [
-        "custom/clock",
-        "custom/weather",
-        "tray"
-    ],
-    "modules-right": [],
 
-    "custom/network-speed": {
-        "format": " {}",
-        "interval": 1,
-        "exec": "psuinfo -c k 2>/dev/null"
-    },
+    // -------------------------------------------------------------------------
+    // Modules
+    // -------------------------------------------------------------------------
 
-    "temperature": {
-        //"thermal-zone": 2,
-        "interval": 1,
-        "critical-threshold": 80,
-        "format": " {temperatureC}°C"
+    "clock": {
+        "format": "{: %I:%M %a %d }",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
     },
 
     "cpu": {
@@ -58,51 +58,12 @@
         }
     },
 
-    "disk": {
-       "interval": 30,
-        "format": "disk: {percentage_free}% remaining on {path}",
-        "path": "/"
-    },
-
-    "custom/weather": {
-        "interval": 3600,
-        "exec": "curl 'https://wttr.in/Tbilisi?m&format=3'"
-    },
-
-    "custom/clock": {
-        "format": "{}",
+    "temperature": {
+        //"thermal-zone": 2,
         "interval": 1,
-        "exec": "date"
-    }
-},
-
-{
-    // -------------------------------------------------------------------------
-    // Global configuration
-    // -------------------------------------------------------------------------
-
-    "layer": "bottom",
-    "position": "bottom",
-    "height": 16,
-    "output": "eDP-1",
-
-    "modules-left": ["sway/workspaces"],
-    "modules-center": ["sway/mode"],
-    "modules-right": [
-        "network#vpn",
-        "network#wifi",
-        "bluetooth",
-        "sway/language",
-        "idle_inhibitor",
-        "pulseaudio",
-        "custom/dnf",
-        "backlight",
-        "battery"
-    ],
-
-    // -------------------------------------------------------------------------
-    // Modules
-    // -------------------------------------------------------------------------
+        "critical-threshold": 80,
+        "format": "  {temperatureC}°C"
+    },
 
     "battery": {
         "format": "{capacity}% {icon}",
@@ -141,9 +102,7 @@
     "pulseaudio": {
         "scroll-step": 5,
         "format": "vol:{volume}%",
-        "format-muted": "MUTED",
-        "format-source": "",
-        "format-source-muted": " MUTED",
+        "format-muted": "muted",
         "format-icons": {
             "headphone": "HEADPHONE",
             "headset": "HEADSET",
@@ -229,77 +188,79 @@
     },
     "network#vpn": {
         "interface": "tun0",
-        "format": " {ifname}: {ipaddr}/{cidr}",
-        "format-disconnected": "",
-        "tooltip-format": "{ifname}: {ipaddr}/{cidr}",
+        "format": "",
+        //"format": " {ifname}: {ipaddr}/{cidr}",
+        "format-disconnected": "",
+        //"tooltip-format": "{ifname}: {ipaddr}/{cidr}",
         "on-click": "nm-connection-editor"
     },
     "network#wifi": {
         "interface": "wlp*",
         "format-ethernet": "",
-        "format-wifi": " {essid} ({signalStrength}%): {ipaddr}/{cidr}",
+        "format-wifi": " {essid} ({signalStrength}%)",
+        //"format-wifi": " {essid} ({signalStrength}%): {ipaddr}/{cidr}",
         "format-linked": "",
         "format-disconnected": "",
         "tooltip-format": "{ifname}: {ipaddr}/{cidr}",
         "on-click": "nm-connection-editor"
     },
     "bluetooth": {
-        "format": "bluetooth: {status}",
+        "format": ": {status}",
         "format-off": "",
-        "format-on": "bluetooth",
-        "format-connected": "bluetooth: {device_alias}",
-        "format-connected-battery": "bluetooth: {device_alias} {device_battery_percentage}%",
+        "format-on": "",
+        "format-connected": ": {device_alias}",
+        "format-connected-battery": ": {device_alias} {device_battery_percentage}%",
         "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
         "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
         "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
         "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%",
         "on-click": "blueberry"
     }
-},
-
-{
-    // -------------------------------------------------------------------------
-    // Config for extended monitor
-    // -------------------------------------------------------------------------
-
-    "layer": "bottom",
-    "position": "top",
-    "height": 16,
-    "output": "DP-1",
-
-    "modules-left": [
-        "sway/workspaces"
-    ],
-    "modules-center": [
-        "custom/clock",
-        "sway/language",
-        "idle_inhibitor"
-    ],
-    "modules-right": [],
-
-    // Modules:
-
-    "custom/clock": {
-        "format": "{}",
-        "interval": 1,
-        "exec": "date"
-    },
-
-    "sway/language": {
-        "format": " {}",
-        "min-length": 5,
-        "tooltip": false,
-        "on-click": "swaymsg input $(swaymsg -t get_inputs --raw | jq '[.[] | select(.type == \"keyboard\")][0] | .identifier') xkb_switch_layout next"
-    },
-
-    "idle_inhibitor": {
-        "format": "{icon}",
-        "format-icons": {
-            "activated": "idle",
-            "deactivated": "idle"
-        }
-    }
 }
+
+// {
+//     // -------------------------------------------------------------------------
+//     // Config for extended monitor
+//     // -------------------------------------------------------------------------
+
+//     "layer": "bottom",
+//     "position": "top",
+//     "height": 16,
+//     "output": "DP-1",
+
+//     "modules-left": [
+//         "sway/workspaces"
+//     ],
+//     "modules-center": [
+//         "custom/clock",
+//         "sway/language",
+//         "idle_inhibitor"
+//     ],
+//     "modules-right": [],
+
+//     // Modules:
+
+//     "custom/clock": {
+//         "format": "{}",
+//         "interval": 1,
+//         "exec": "date"
+//     },
+
+//     "sway/language": {
+//         "format": " {}",
+//         "min-length": 5,
+//         "tooltip": false,
+//         "on-click": "swaymsg input $(swaymsg -t get_inputs --raw | jq '[.[] | select(.type == \"keyboard\")][0] | .identifier') xkb_switch_layout next"
+//     },
+
+//     "idle_inhibitor": {
+//         "format": "{icon}",
+//         "format-icons": {
+//             "activated": "idle",
+//             "deactivated": "idle"
+//         }
+//     }
+// }
 
 ]
 
